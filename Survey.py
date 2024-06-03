@@ -7,11 +7,12 @@ from Question import Question
 
 class Respondent:
 
-    def __init__(self, playwright: Playwright, qst : list):
+    def __init__(self, link : str, playwright: Playwright, qst : list):
         self.__browser = playwright.chromium.launch(headless=False)
         self.__context = self.__browser.new_context()
         self.__page = self.__context.new_page()
         self.__questions = qst
+        self.__src = link
 
 
     def respond(self) -> None:
@@ -48,7 +49,7 @@ class Respondent:
 
     def vote(self) -> None:
 
-        self.__page.goto("https://forms.gle/TeFsohnJdJBnsy5f8")
+        self.__page.goto(self.__src)
 
         self.respond()
         self.send()

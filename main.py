@@ -4,7 +4,6 @@ from Survey import Respondent
 from Question import Question
 
 
-
 def get_questions(filename : str) -> list:
     questions = list()
     f = open("questions.txt", "r")
@@ -41,5 +40,5 @@ for i in questions:
 
 while True:
     with sync_playwright() as playwright:
-        r = Respondent(playwright, questions)
+        r = Respondent("https://forms.gle/TeFsohnJdJBnsy5f8", playwright, questions)
         r.vote()
