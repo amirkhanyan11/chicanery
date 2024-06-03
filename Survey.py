@@ -4,15 +4,16 @@ import random
 from playwright.sync_api import Playwright, sync_playwright, expect
 from Question import Question
 
+survey = "https://forms.gle/TeFsohnJdJBnsy5f8"
 
 class Respondent:
 
-    def __init__(self, link : str, playwright: Playwright, qst : list, gender : str = "Unspecified"):
+    def __init__(self, playwright: Playwright, qst : list, gender : str = "Unspecified"):
         self.__browser = playwright.chromium.launch(headless=False)
         self.__context = self.__browser.new_context()
         self.__page = self.__context.new_page()
         self.__questions = qst
-        self.__src = link
+        self.__src = survey
         g_arr = ["Male", "Female"]
         self.__gender = g_arr[0 if random.randint(1, 101) >= 65 else 1] if gender == "Unspecified" else gender 
 
