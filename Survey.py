@@ -13,7 +13,7 @@ class Respondent:
         self.__page = self.__context.new_page()
         self.__questions = qst
         self.__src = Utility.survey
-        self.__gender = "Male" if random.randint(1, 101) >= Utility.male_ratio_by_default else "Female" if gender == "Unspecified" else gender 
+        self.__gender = "Male" if random.randint(1, 100) >= Utility.male_ratio_by_default else "Female" if gender == "Unspecified" else gender 
 
 
     def respond(self) -> None:
@@ -36,7 +36,7 @@ class Respondent:
         
         choice = ansz[random.randint(0, len(ansz) - 1)]
         for a in ansz:
-            if a.get_odds()[self.__gender] >= random.randint(1, 101):
+            if a.get_odds()[self.__gender] >= random.randint(1, 100):
                 choice = a
                 
         # print (choice.get_name()) 
