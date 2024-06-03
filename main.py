@@ -5,9 +5,9 @@ from Question import Question, Answer
 from Utility import Utility
 
 
-questions = Utility.get_questions("questions.txt")
+questions = Utility.get_questions()
 
-while True:
+for i in range(1, 3, 1):
     with sync_playwright() as playwright:
         r = Respondent(playwright, questions)
         r.vote()

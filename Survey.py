@@ -28,7 +28,12 @@ class Respondent:
     def __respond_to(self, question : str, answers : dict) -> None:
         
         self.__page.wait_for_load_state("networkidle")
-        self.__page.get_by_label(question.get_name()).locator("div").filter(has_text=answers[question.get_name()]).nth(2).click()     # self.__page.get_by_label(self.__questions[q][answers[i]]).click()
+        if "(по шкале от 1 до 5)" in question.get_name():
+            self.__page.get_by_label(str(random.randint(2, 4)), exact=True).click()
+        else:
+            self.__page.get_by_label(question.get_name()).locator("div").filter(has_text=answers[question.get_name()]).nth(2).click()     # self.__page.get_by_label(self.__questions[q][answers[i]]).click()
+
+
 
     def __decide(self, question : Question, answers : dict) -> str:
         
@@ -44,7 +49,7 @@ class Respondent:
         return choice.get_name()
         
 
-    def __generate_answers(self) -> list:
+    def __generate_answers(self) -> dict:
 
         answers = dict()
         for q in self.__questions:

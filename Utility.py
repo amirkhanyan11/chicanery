@@ -1,13 +1,14 @@
 from Question import Question, Answer
 
 male_ratio_by_default = 65
-survey = "https://forms.gle/TeFsohnJdJBnsy5f8"
+# survey = "https://forms.gle/TeFsohnJdJBnsy5f8"
+survey = "https://forms.gle/nBvfMxFE8ixA9ouL8"
 
 class Utility:
 
-    def get_questions(filename : str) -> list:
+    def get_questions(filename : str = "text.txt") -> list:
         questions = list()
-        f = open("questions.txt", "r")
+        f = open(filename, "r")
 
         for line in f.readlines():
             wordlist = line.split(":")
@@ -28,6 +29,7 @@ class Utility:
                 answer_list.append(ans)
             
             cur.set_answers(answer_list)
+            print(cur.get_name())
         
         f.close()
         return questions
