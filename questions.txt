@@ -1,0 +1,3 @@
+are u gay?:yes:no:Maybe
+are you sure?:yes:no:idk
+there's no doubt in your mind?:meh:i would prefer not to answer")
