@@ -7,7 +7,6 @@ from Utility import Utility
 
 questions = Utility.get_questions("questions.txt")
 
-
 while True:
     with sync_playwright() as playwright:
         r = Respondent(playwright, questions)

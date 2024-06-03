@@ -3,8 +3,7 @@ import time
 import random
 from playwright.sync_api import Playwright, sync_playwright, expect
 from Question import Question
-
-survey = "https://forms.gle/TeFsohnJdJBnsy5f8"
+import Utility
 
 class Respondent:
 
@@ -13,8 +12,8 @@ class Respondent:
         self.__context = self.__browser.new_context()
         self.__page = self.__context.new_page()
         self.__questions = qst
-        self.__src = survey
-        self.__gender = "Male" if random.randint(1, 101) >= 65 else "Female" if gender == "Unspecified" else gender 
+        self.__src = Utility.survey
+        self.__gender = "Male" if random.randint(1, 101) >= Utility.male_ratio_by_default else "Female" if gender == "Unspecified" else gender 
 
 
     def respond(self) -> None:
@@ -35,12 +34,12 @@ class Respondent:
         
         ansz = question.get_answers();
         
-        choice = ansz[0]
+        choice = ansz[random.randint(0, len(ansz) - 1)]
         for a in ansz:
             if a.get_odds()[self.__gender] >= random.randint(1, 101):
                 choice = a
-                break
-        # print (choice.get_name())
+                
+        # print (choice.get_name()) 
         # print (choice.get_odds()[self.__gender])
         return choice.get_name()
         
