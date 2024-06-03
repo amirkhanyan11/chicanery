@@ -11,10 +11,10 @@ questions = {
 }
 
 
-for i in range (1, 5, 1):
+while True:
     with sync_playwright() as playwright:
         r = Respondent(playwright, questions)
-        r.run()
+        r.vote()
 
 # with sync_playwright() as playwright:
 #     a = Xareb(playwright)

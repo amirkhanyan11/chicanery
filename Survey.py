@@ -33,7 +33,7 @@ class Respondent:
         self.__page.get_by_role("button", name="Ուղարկել").click()
 
 
-    def run(self) -> None:
+    def vote(self) -> None:
 
         self.__page.goto("https://forms.gle/TeFsohnJdJBnsy5f8")
 
