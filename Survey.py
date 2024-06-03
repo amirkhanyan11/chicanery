@@ -2,12 +2,12 @@ import re
 import time
 import random
 from playwright.sync_api import Playwright, sync_playwright, expect
-
+from Question import Question
 
 
 class Respondent:
 
-    def __init__(self, playwright: Playwright, qst : dict):
+    def __init__(self, playwright: Playwright, qst : list):
         self.__browser = playwright.chromium.launch(headless=False)
         self.__context = self.__browser.new_context()
         self.__page = self.__context.new_page()
@@ -16,17 +16,30 @@ class Respondent:
 
     def respond(self) -> None:
         
-        answers = []
-        for q in self.__questions:
-            answers.append(random.randint(1, 100) % len(self.__questions[q])) 
-        
+        answers = self.__generate_answers()
 
-        i = 0;
-        for q in self.__questions:
-            self.__page.wait_for_load_state("networkidle")
-            self.__page.get_by_label(q).locator("div").filter(has_text=self.__questions[q][answers[i]]).nth(2).click()     # self.__page.get_by_label(self.__questions[q][answers[i]]).click()
+        for question in self.__questions:
+            self.__respond_to(question, answers)
             time.sleep(1)
-            i += 1
+
+
+    def __respond_to(self, question : str, answers : dict) -> None:
+        
+        self.__page.wait_for_load_state("networkidle")
+        self.__page.get_by_label(question.get_name()).locator("div").filter(has_text=answers[question.get_name()]).nth(2).click()     # self.__page.get_by_label(self.__questions[q][answers[i]]).click()
+            
+
+    def __generate_answers(self) -> list:
+
+        answers = dict()
+        for q in self.__questions:
+            answers[q.get_name()] = q.get_answers()[random.randint(1, 100) % len(q.get_answers())]
+        
+        for a in answers:
+            print(a)
+            print(answers[a])
+
+        return answers
 
 
     def send(self) -> None:
