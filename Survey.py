@@ -14,8 +14,7 @@ class Respondent:
         self.__page = self.__context.new_page()
         self.__questions = qst
         self.__src = survey
-        g_arr = ["Male", "Female"]
-        self.__gender = g_arr[0 if random.randint(1, 101) >= 65 else 1] if gender == "Unspecified" else gender 
+        self.__gender = "Male" if random.randint(1, 101) >= 65 else "Female" if gender == "Unspecified" else gender 
 
 
     def respond(self) -> None:
