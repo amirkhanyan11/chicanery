@@ -35,10 +35,6 @@ class Respondent:
         answers = dict()
         for q in self.__questions:
             answers[q.get_name()] = q.get_answers()[random.randint(1, 100) % len(q.get_answers())]
-        
-        for a in answers:
-            print(a)
-            print(answers[a])
 
         return answers
 

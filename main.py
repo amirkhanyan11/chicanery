@@ -24,8 +24,6 @@ def get_questions(filename : str) -> list:
             answer_list.append(elem)
         
         cur.set_answers(answer_list)
-        # print(cur.get_name())
-        # print(cur.get_answers())
     
     f.close()
     return questions
@@ -33,9 +31,9 @@ def get_questions(filename : str) -> list:
 
 questions = get_questions("questions.txt")
 
-for i in questions:
-    print(i.get_name())
-    print(i.get_answers())
+# for i in questions:
+#     print(i.get_name())
+#     print(i.get_answers())
 
 
 while True:
