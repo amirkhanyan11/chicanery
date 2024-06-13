@@ -1,9 +1,51 @@
 import re
 import time
 import random
+from Question import Answer
 from playwright.sync_api import Playwright, sync_playwright, expect
-from Question import Question
-import Utility
+
+class Respondent:
+    pass
+
+class Question:
+
+    def __init__(self, name : str, answers : list):
+        self.__name = name
+        self.__answers : list = answers
+        self.__answer  = None
+
+
+    def respond(self, respondent : Respondent) -> None:
+
+        choice = self.__answers[0]
+        for a in self.__answers:
+            if a.get_odds()["Male"] >= random.randint(1, 100):
+            # if a.get_odds()[respondent.get_gender()] >= random.randint(1, 100):
+                choice = a
+
+        return choice.get_name()
+        # print (choice.get_name())
+        # print (choice.get_odds()[self.__gender])
+    
+        # respondent.get_page().get_by_label(self.__name).locator("div").filter(has_text=choice.get_name()).nth(2).click()
+
+    def get_name(self) -> str:
+        return self.__name
+
+
+class NumericResponseQuestion(Question):
+
+    def __init__(self, name : str, answers : list = dict()):
+        Question.__init__(self, name, answers)
+
+    def respond (self, respondent : Respondent) -> None:
+        choice = None
+        for a in self.__answers:
+            if a.get_odds()[respondent.get_gender()] >= random.randint(1, 100):
+                choice = a
+
+        respondent.get_page().get_by_label(str(random.randint(2, 4)), exact=True).click()
+
 
 class Respondent:
 
@@ -13,54 +55,23 @@ class Respondent:
         self.__page = self.__context.new_page()
         self.__questions = qst
         self.__src = Utility.survey
-        self.__gender = "Male" if random.randint(1, 100) >= Utility.male_ratio_by_default else "Female" if gender == "Unspecified" else gender 
+        self.__gender = "Male" if random.randint(1, 100) >= Utility.male_ratio_by_default else "Female" if gender == "Unspecified" else gender
 
 
     def respond(self) -> None:
-        
+
         answers = self.__generate_answers()
 
         for question in self.__questions:
-            self.__respond_to(question, answers)
-            # time.sleep(1)
+            self.__respond_to(question)
+            time.sleep(1) 
 
-
-    def __respond_to(self, question : str, answers : dict) -> None:
-        
+    def __respond_to(self, strategy : Question) -> None:
         self.__page.wait_for_load_state("networkidle")
-        if "(по шкале от 1 до 5)" in question.get_name():
-            self.__page.get_by_label(str(random.randint(2, 4)), exact=True).click()
-        else:
-            self.__page.get_by_label(question.get_name()).locator("div").filter(has_text=answers[question.get_name()]).nth(2).click()     # self.__page.get_by_label(self.__questions[q][answers[i]]).click()
-
-
-
-    def __decide(self, question : Question, answers : dict) -> str:
-        
-        ansz = question.get_answers();
-        
-        choice = ansz[random.randint(0, len(ansz) - 1)]
-        for a in ansz:
-            if a.get_odds()[self.__gender] >= random.randint(1, 100):
-                choice = a
-                
-        # print (choice.get_name()) 
-        # print (choice.get_odds()[self.__gender])
-        return choice.get_name()
-        
-
-    def __generate_answers(self) -> dict:
-
-        answers = dict()
-        for q in self.__questions:
-            answers[q.get_name()] = self.__decide(q, answers)          #q.get_answers()[random.randint(1, 100) % len(q.get_answers())].get_name()
-
-        return answers
-
+        strategy.respond(self)
 
     def send(self) -> None:
         self.__page.get_by_role("button", name="Ուղարկել").click()
-
 
     def vote(self) -> None:
 
@@ -73,4 +84,10 @@ class Respondent:
 
         self.__context.close()
         self.__browser.close()
+
+    def get_gender(self):
+        return self.__gender
+
+    def get_page(self):
+        return self.__page
 
