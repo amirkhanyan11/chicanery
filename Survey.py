@@ -28,6 +28,7 @@ class Respondent:
         strategy.respond(self)
 
     def send(self) -> None:
+        self.__page.wait_for_load_state("networkidle")
         self.__page.get_by_role("button", name="Ուղարկել").click()
 
     def vote(self) -> None:
