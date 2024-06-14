@@ -35,9 +35,7 @@ class Respondent:
         self.__page.goto(self.__m_utility.survey)
 
         self.respond()
-        self.send()
-
-        # ---------------------
+        self.send() 
 
         self.__context.close()
         self.__browser.close()

@@ -9,7 +9,7 @@ class Respondent:
 class Question:
 
     def __init__(self, name : str, answers : list):
-        self.__name = name
+        self._name = name
         self._answers : list = answers
         self.__answer  = None
 
@@ -18,17 +18,13 @@ class Question:
 
         choice = self._answers[0]
         for a in self._answers:
-            # if a.get_odds()["Male"] >= random.randint(1, 100):
             if a.get_odds()[respondent.get_gender()] >= random.randint(1, 100):
                 choice = a
     
-        respondent.get_page().get_by_label(self.__name).locator("div").filter(has_text=choice.get_name()).nth(2).click()
+        respondent.get_page().get_by_label(self._name).locator("div").filter(has_text=choice.get_name()).nth(2).click()
 
     def get_name(self) -> str:
-        return self.__name
-
-    
-
+        return self._name
 
 
 class NumericResponseQuestion(Question):
@@ -40,13 +36,40 @@ class NumericResponseQuestion(Question):
 
         choice = self._answers[0];
         for a in self._answers:
-            # if a.get_odds()["Male"] >= random.randint(1, 100):
             if a.get_odds()[respondent.get_gender()] >= random.randint(1, 100):
                 choice = a
 
-        # return choice.get_name()
-
         respondent.get_page().get_by_label(str(random.randint(2, 4)), exact=True).click()
+
+
+
+class MultipleResponseQuestion(Question):
+
+    def __init__(self, name : str, answers : list):
+        Question.__init__(self, name, answers)
+
+    def __decide(self, respondent : Respondent) -> Answer:
+
+        choice = self._answers[0];
+        for a in self._answers:
+            if a.get_odds()[respondent.get_gender()] >= random.randint(1, 100):
+                choice = a
+
+        return choice
+
+
+    def respond (self, respondent : Respondent) -> None:
+
+        lim = random.randint(1, 5)
+        cache = set()
+
+        for i in range(0, lim):
+            choice = self.__decide(respondent)
+            while choice.get_name() in cache:
+                choice = self.__decide(respondent)
+            cache.update(choice.get_name())
+            respondent.get_page().get_by_label(self._name).locator("div").filter(has_text=choice.get_name()).nth(2).click()
+
 
 
 
@@ -83,6 +106,7 @@ class Utility:
 
 
     def get_questions(filename : str = "some.txt") -> list:
+        
         questions = list()
         f = open(filename, "r")
 
@@ -92,9 +116,3 @@ class Utility:
         
         return questions
     
-        # for q in questions:
-        #     if type(q) is NumericResponseQuestion:
-        #         print(super(NumericResponseQuestion, q).get_name() + " --> " + q.respond(None))
-        #     else:
-        #         print(q.get_name() + " --> " + q.respond(None))
-
