@@ -104,9 +104,8 @@ class Utility:
         self.__survey_reference = name;
 
 
-
     def get_questions(filename : str = "some.txt") -> list:
-        
+
         questions = list()
         f = open(filename, "r")
 
