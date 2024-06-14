@@ -35,6 +35,7 @@ class Respondent:
         self.__page.goto(self.__m_utility.survey)
 
         self.respond()
+        # time.sleep(100)
         self.send() 
 
         self.__context.close()

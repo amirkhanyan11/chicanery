@@ -54,12 +54,12 @@ class MultipleResponseQuestion(Question):
         for a in self._answers:
             if a.get_odds()[respondent.get_gender()] >= random.randint(1, 100):
                 choice = a
-
+            
         return choice
 
 
     def respond (self, respondent : Respondent) -> None:
-
+        
         lim = random.randint(1, 5)
         cache = set()
 
@@ -67,7 +67,8 @@ class MultipleResponseQuestion(Question):
             choice = self.__decide(respondent)
             while choice.get_name() in cache:
                 choice = self.__decide(respondent)
-            cache.update(choice.get_name())
+            cache.add(choice.get_name())
+            print(choice.get_name())
             respondent.get_page().get_by_label(self._name).locator("div").filter(has_text=choice.get_name()).nth(2).click()
 
 
@@ -76,7 +77,7 @@ class MultipleResponseQuestion(Question):
 class Utility:
 
     def __init__(self) -> None:
-        self.survey = "https://forms.gle/nBvfMxFE8ixA9ouL8"
+        self.survey = "https://forms.gle/9BxfbUpMyHegfLii6"
         self.male_ratio_by_default = 65
 
     @property
