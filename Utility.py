@@ -65,10 +65,10 @@ class MultipleResponseQuestion(Question):
 
         for i in range(0, lim):
             choice = self.__decide(respondent)
-            while choice.get_name() in cache:
+            if choice.get_name() in cache:
                 choice = self.__decide(respondent)
             cache.add(choice.get_name())
-            print(choice.get_name())
+            # print(choice.get_name())
             respondent.get_page().get_by_label(self._name).locator("div").filter(has_text=choice.get_name()).nth(2).click()
 
 

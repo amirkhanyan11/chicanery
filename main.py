@@ -7,7 +7,7 @@ from Question import Answer
 
 questions : list = Utility.get_questions()
 
-for i in range(1, 3, 1):
+while True:
     with sync_playwright() as playwright:
         r = Respondent(playwright, questions, "Female")
         r.vote()

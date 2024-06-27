@@ -37,6 +37,7 @@ class Respondent:
 
         self.respond()
         # time.sleep(100)
+        self.__page.wait_for_load_state("networkidle")
         self.send() 
 
         self.__context.close()
